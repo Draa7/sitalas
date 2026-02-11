@@ -16,18 +16,16 @@ class UserForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('Nama')
                     ->required(),
                 TextInput::make('email')
-                    ->label('Email address')
+                    ->label('Alamat Email')
                     ->email()
                     ->required(),
                 TextInput::make('password')
+                    ->label('Kata Sandi')
                     ->password()
                     ->required(),
-                Toggle::make('active')
-                    ->required(),
-                DateTimePicker::make('last_login'),
-                TextInput::make('tlsk'),
                 Select::make('direktorat_id')
                     ->label('Direktorat')
                     ->relationship('unitPengolah', 'direktorat')
@@ -40,6 +38,9 @@ class UserForm
                     ->image()
                     ->maxSize(2048),
                 TextInput::make('no_hp'),
+                Toggle::make('active')
+                    ->label('Aktif')
+                    ->required(),
             ]);
     }
 }

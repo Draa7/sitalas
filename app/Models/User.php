@@ -22,13 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'active',
-        'last_login',
-        'tlsk',
         'direktorat_id',
         'file_ttd',
-        'sopd',
         'no_hp',
+        'active',
     ];
 
     /**

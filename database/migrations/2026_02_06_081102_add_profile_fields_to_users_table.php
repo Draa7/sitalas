@@ -12,13 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('active')->default(true);
-            $table->timestamp('last_login')->nullable();
-            $table->string('tlsk')->nullable();
             $table->unsignedBigInteger('direktorat_id')->nullable()->index();
             $table->string('file_ttd')->nullable();
-            $table->string('sopd')->nullable();
             $table->string('no_hp', 20)->nullable();
+            $table->boolean('active')->default(true);
         });
     }
 
@@ -29,13 +26,11 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
-                'active',
-                'last_login',
-                'tlsk',
                 'direktorat_id',
                 'file_ttd',
                 'sopd',
                 'no_hp',
+                'active',
             ]);
         });
     }

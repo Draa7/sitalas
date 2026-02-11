@@ -16,11 +16,13 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nama')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('Alamat Email')
                     ->searchable(),
                 TextColumn::make('email_verified_at')
+                    ->label('Email Verifikasi')
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('created_at')
@@ -31,22 +33,18 @@ class UsersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                IconColumn::make('active')
-                    ->boolean(),
-                TextColumn::make('last_login')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('tlsk')
-                    ->searchable(),
                 TextColumn::make('direktorat_id')
+                    ->label('Direktorat')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('file_ttd')
-                    ->searchable(),
-                TextColumn::make('sopd')
+                    ->label('File Tanda Tangan')
                     ->searchable(),
                 TextColumn::make('no_hp')
                     ->searchable(),
+                IconColumn::make('active')
+                    ->label('Aktif')
+                    ->boolean(),
             ])
             ->filters([
                 //
