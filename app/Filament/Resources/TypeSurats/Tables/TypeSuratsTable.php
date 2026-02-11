@@ -15,8 +15,10 @@ class TypeSuratsTable
         return $table
             ->columns([
                 TextColumn::make('type_surat')
+                    ->label('Type Surat')
                     ->searchable(),
                 TextColumn::make('kode_no_agenda')
+                    ->label('Kode No Agenda')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

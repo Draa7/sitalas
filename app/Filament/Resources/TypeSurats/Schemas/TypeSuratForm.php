@@ -12,8 +12,10 @@ class TypeSuratForm
         return $schema
             ->components([
                 TextInput::make('type_surat')
+                    ->label('Type Surat')
                     ->required(),
                 TextInput::make('kode_no_agenda')
+                    ->label('Kode No Agenda')
                     ->required(),
             ]);
     }
