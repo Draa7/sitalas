@@ -12,7 +12,7 @@ class KlasifikasiForm
         return $schema
             ->components([
                 TextInput::make('klasifikasi')
-                    ->label('klasifikasi surat')
+                    ->label('klasifikasi Surat')
                     ->required(),
             ]);
     }

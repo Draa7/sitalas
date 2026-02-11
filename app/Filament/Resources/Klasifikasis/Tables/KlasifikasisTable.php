@@ -15,6 +15,7 @@ class KlasifikasisTable
         return $table
             ->columns([
                 TextColumn::make('klasifikasi')
+                    ->label('Klasifikasi Surat')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
