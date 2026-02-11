@@ -25,6 +25,7 @@ class IntruksiDisposisiForm
                     ->required()
                     ->numeric(),
                 Toggle::make('active')
+                    ->label('Aktif')
                     ->required(),
             ]);
     }

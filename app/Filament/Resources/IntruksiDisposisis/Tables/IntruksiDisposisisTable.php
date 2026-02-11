@@ -24,6 +24,7 @@ class IntruksiDisposisisTable
                     ->numeric()
                     ->sortable(),
                 IconColumn::make('active')
+                    ->label('Aktif')
                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
