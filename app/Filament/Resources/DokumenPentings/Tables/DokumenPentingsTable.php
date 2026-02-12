@@ -26,9 +26,8 @@ class DokumenPentingsTable
                 TextColumn::make('no_surat')
                     ->label('No Surat')
                     ->searchable(),
-                
-                TextColumn::make('direktorat_id')
-                    ->label('Tujuan')
+                TextColumn::make('unitPengolah.direktorat')
+                    ->label('Direktorat')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('pengirim')
