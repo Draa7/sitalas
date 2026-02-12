@@ -19,8 +19,9 @@ class ProposalsTable
                     ->sortable(),
                 TextColumn::make('no_reg')
                     ->searchable(),
-                TextColumn::make('direktorat_id')
-                    ->numeric()
+                TextColumn::make('unitPengolah.direktorat')
+                    ->label('Unit Pengolah')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('pengirim')
                     ->searchable(),
