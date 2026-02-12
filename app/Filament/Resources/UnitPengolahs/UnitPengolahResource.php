@@ -9,6 +9,7 @@ use App\Filament\Resources\UnitPengolahs\Schemas\UnitPengolahForm;
 use App\Filament\Resources\UnitPengolahs\Tables\UnitPengolahsTable;
 use App\Models\UnitPengolah;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -17,6 +18,8 @@ use Filament\Tables\Table;
 class UnitPengolahResource extends Resource
 {
     protected static ?string $model = UnitPengolah::class;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Master';
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-home-modern';
 

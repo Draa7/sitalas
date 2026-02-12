@@ -9,6 +9,7 @@ use App\Filament\Resources\SifatSurats\Schemas\SifatSuratForm;
 use App\Filament\Resources\SifatSurats\Tables\SifatSuratsTable;
 use App\Models\SifatSurat;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -17,6 +18,8 @@ use Filament\Tables\Table;
 class SifatSuratResource extends Resource
 {
     protected static ?string $model = SifatSurat::class;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Master';
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-inbox';
 

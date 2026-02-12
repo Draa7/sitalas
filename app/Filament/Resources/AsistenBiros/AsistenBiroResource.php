@@ -9,6 +9,7 @@ use App\Filament\Resources\AsistenBiros\Schemas\AsistenBiroForm;
 use App\Filament\Resources\AsistenBiros\Tables\AsistenBirosTable;
 use App\Models\AsistenBiro;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -17,6 +18,8 @@ use Filament\Tables\Table;
 class AsistenBiroResource extends Resource
 {
     protected static ?string $model = AsistenBiro::class;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Master';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

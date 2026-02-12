@@ -8,6 +8,7 @@ use App\Filament\Resources\Disposisis\Pages\ListDisposisis;
 use App\Filament\Resources\Disposisis\Schemas\DisposisiForm;
 use App\Filament\Resources\Disposisis\Tables\DisposisisTable;
 use App\Models\Disposisi;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -17,6 +18,8 @@ use Filament\Tables\Table;
 class DisposisiResource extends Resource
 {
     protected static ?string $model = Disposisi::class;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Master';
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-pencil';
 

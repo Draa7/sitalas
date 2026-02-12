@@ -9,6 +9,7 @@ use App\Filament\Resources\Klasifikasis\Schemas\KlasifikasiForm;
 use App\Filament\Resources\Klasifikasis\Tables\KlasifikasisTable;
 use App\Models\Klasifikasi;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -17,6 +18,8 @@ use Filament\Tables\Table;
 class KlasifikasiResource extends Resource
 {
     protected static ?string $model = Klasifikasi::class;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Master';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

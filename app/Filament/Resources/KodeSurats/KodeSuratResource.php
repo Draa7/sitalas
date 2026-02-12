@@ -9,6 +9,7 @@ use App\Filament\Resources\KodeSurats\Schemas\KodeSuratForm;
 use App\Filament\Resources\KodeSurats\Tables\KodeSuratsTable;
 use App\Models\KodeSurat;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -17,6 +18,8 @@ use Filament\Tables\Table;
 class KodeSuratResource extends Resource
 {
     protected static ?string $model = KodeSurat::class;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Master';
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-envelope';
 
