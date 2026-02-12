@@ -21,7 +21,10 @@ class DokumenPentingResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Dokumen Penting';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+     protected static ?string $navigationLabel = 'Dokumen Penting';
+
+
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-document';
 
     protected static ?string $recordTitleAttribute = 'dokumen_penting';
 

@@ -21,7 +21,9 @@ class ProposalResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Proposal';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $navigationLabel = 'Proposal';
+
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?string $recordTitleAttribute = 'proposal';
 
