@@ -16,6 +16,7 @@ class KodeSuratForm
                 TextInput::make('index')
                     ->required(),
                 TextInput::make('tahun')
+                    ->numeric()
                     ->required(),
             ]);
     }
