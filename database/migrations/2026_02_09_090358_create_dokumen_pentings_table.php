@@ -16,13 +16,13 @@ return new class extends Migration
             $table->date('tgl_terima');
             $table->date('tgl_surat');
             $table->string('no_surat');
-            $table->integer('jumlah_sk');
-            $table->unsignedBigInteger('direktorat_id')->nullable()->index();
-            $table->string('pengirim');
+            $table->integer('jumlah_sk')->nullable();
+            $table->unsignedBigInteger('direktorat_id')->index();
+            $table->string('pengirim')->nullablle();
             $table->string('perihal');
-            $table->string('kontak_person');
+            $table->string('kontak_person')->nullable();
             $table->text('catatan');
-            $table->string('upload_file');
+            $table->string('upload_file')->nullable();
             $table->boolean('kirim_ke_tujuan')->default(false);
             $table->timestamps();
         });
