@@ -16,7 +16,7 @@ class IntruksiDisposisisTable
         return $table
             ->columns([
                 TextColumn::make('unitPengolah.direktorat')
-                    ->label('Intruksi')
+                    ->label('Direktorat')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('intruksi')
