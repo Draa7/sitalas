@@ -6,6 +6,7 @@ use App\Models\DokumenPenting;
 use App\Models\Proposal;
 use App\Models\IntruksiDisposisi;
 use App\Models\AsistenBiro;
+use App\Models\BiroBagian;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -69,5 +70,15 @@ class UnitPengolah extends Model
     public function asistenBiroSebagaiBiro()
     {
         return $this->hasMany(AsistenBiro::class, 'biro_unit_pengolah_id');
+    }
+
+    public function biroBagianSebagaiBiro()
+    {
+        return $this->hasMany(BiroBagian::class, 'biro_unit_pengolah_id');
+    }
+
+    public function biroBagiansebagaiSubBiro()
+    {
+        return $this->hasMany(BiroBagian::class, 'sub_biro_unit_pengolah_id');
     }
 }
