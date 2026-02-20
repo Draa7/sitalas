@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePenerima extends CreateRecord
 {
     protected static string $resource = PenerimaResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

@@ -6,6 +6,8 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
 
 class PenerimaForm
@@ -26,28 +28,37 @@ class PenerimaForm
                 TextInput::make('banyak_surat')
                     ->required()
                     ->numeric(),
-                TextInput::make('direktorat_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('kode_id')
-                    ->required()
-                    ->numeric(),
+                Select::make('direktorat_id')
+                    ->label('Unit Pengolah')
+                    ->relationship('unitPengolah', 'direktorat')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+                Select::make('kode_id')
+                    ->label('Kode Surat')
+                    ->relationship('kodeSurat', 'kode')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 TextInput::make('pengirim')
                     ->required(),
                 TextInput::make('perihal')
                     ->required(),
                 TextInput::make('kontak_person')
                     ->required(),
-                TextInput::make('sifat_surat_id')
-                    ->required()
-                    ->numeric(),
+                Select::make('sifat_surat_id')
+                    ->label('Sifat Surat')
+                    ->relationship('sifatSurat', 'sifat_surat')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 Textarea::make('ringkasan_poko')
                     ->required()
                     ->columnSpanFull(),
                 Textarea::make('catatan')
                     ->required()
                     ->columnSpanFull(),
-                TextInput::make('file_upload')
+                FileUpload::make('file_upload')
                     ->required(),
                 TextInput::make('no_box')
                     ->required(),
