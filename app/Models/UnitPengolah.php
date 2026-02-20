@@ -7,6 +7,7 @@ use App\Models\Proposal;
 use App\Models\IntruksiDisposisi;
 use App\Models\AsistenBiro;
 use App\Models\BiroBagian;
+use App\Models\Penerima;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -80,5 +81,9 @@ class UnitPengolah extends Model
     public function biroBagiansebagaiSubBiro()
     {
         return $this->hasMany(BiroBagian::class, 'sub_biro_unit_pengolah_id');
+    }
+    public function Penerima()
+    {
+        return $this->hasMany(Penerima::class, 'direktorat_id');
     }
 }
