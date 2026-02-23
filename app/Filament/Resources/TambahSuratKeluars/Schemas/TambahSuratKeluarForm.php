@@ -7,7 +7,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
-use FIlament\Forms\Components\FileUpload;
+use Filament\Forms\Components\FileUpload;
 
 class TambahSuratKeluarForm
 {
@@ -19,25 +19,36 @@ class TambahSuratKeluarForm
                     ->required(),
                 Select::make('klasifikasi_id')
                     ->label('Klasifikasi Surat')
-                    ->relationship('')
+                    ->relationship('Klasifikasi', 'klasifikasi')
+                    ->searchable()
+                    ->preload()
                     ->required(),
                 TextInput::make('no_urut')
                     ->required()
                     ->numeric(),
-                TextInput::make('kode_id')
-                    ->required()
-                    ->numeric(),
+                Select::make('kode_id')
+                    ->label('Kode Surat')
+                    ->relationship('Kode', 'kode')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 TextInput::make('no_surat')
                     ->required(),
-                TextInput::make('sifat_surat_id')
-                    ->required()
-                    ->numeric(),
+                Select::make('sifat_surat_id')
+                    ->label('Sifat Surat')
+                    ->relationship('Sifat', 'sifat_surat')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 Textarea::make('perihal')
                     ->required()
                     ->columnSpanFull(),
-                TextInput::make('direktorat_id')
-                    ->required()
-                    ->numeric(),
+                Select::make('direktorat_id')
+                    ->label('Unit Pengolah')
+                    ->relationship('unitPengolah', 'direktorat')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 TextInput::make('kontak_person')
                     ->required(),
                 TextInput::make('kepada')
@@ -45,7 +56,7 @@ class TambahSuratKeluarForm
                 Textarea::make('keterangan')
                     ->required()
                     ->columnSpanFull(),
-                TextInput::make('upload_file')
+                FileUpload::make('upload_file')
                     ->required(),
                 Textarea::make('lampiran')
                     ->required()

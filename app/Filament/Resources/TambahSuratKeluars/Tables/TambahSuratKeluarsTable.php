@@ -17,25 +17,29 @@ class TambahSuratKeluarsTable
                 TextColumn::make('tanggal_surat')
                     ->date()
                     ->sortable(),
-                TextColumn::make('klasifikasi_id')
-                    ->numeric()
+                TextColumn::make('unitPengolah.direktorat')
+                    ->label('Unit Pegolah')
+                    ->sortable(),
+                TextColumn::make('no_surat')
+                    ->searchable(),
+                TextColumn::make('perihal')
+                    ->label('Perihal')
+                    ->searchable(),
+                TextColumn::make('Klasifikasi.klasifikasi')
+                    ->label('Klasifikasi Surat')
                     ->sortable(),
                 TextColumn::make('no_urut')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('kode_id')
-                    ->numeric()
+                /*TextColumn::make('Kode.kode')
+                    ->label('Kode Surat')
                     ->sortable(),
-                TextColumn::make('no_surat')
-                    ->searchable(),
-                TextColumn::make('sifat_surat_id')
-                    ->numeric()
+                TextColumn::make('Sifat.sifat_surat')
+                    ->label('Sifat Surat')
                     ->sortable(),
-                TextColumn::make('direktorat_id')
-                    ->numeric()
-                    ->sortable(),
+                
                 TextColumn::make('kontak_person')
-                    ->searchable(),
+                    ->searchable(),*/
                 TextColumn::make('kepada')
                     ->searchable(),
                 TextColumn::make('upload_file')
