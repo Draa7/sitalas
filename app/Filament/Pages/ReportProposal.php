@@ -3,7 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Proposal;
-use App\Models\Direktorat;
+use App\Models\User;
 use App\Models\UnitPengolah;
 use Filament\Forms;
 use Filament\Pages\Page;
@@ -14,8 +14,10 @@ use Filament\Schemas\Components\Grid;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
 use UnitEnum;
-
-#use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use Filament\Actions\ExportAction;
+use App\Filament\Exports\ReportProposalExporter;
+use Filament\Notifications\Notification;
+use Filament\Actions\Exports\Models\Export;
 
 class ReportProposal extends Page implements
     Forms\Contracts\HasForms,
@@ -107,6 +109,18 @@ class ReportProposal extends Page implements
             ])
             ->defaultSort('tanggal', 'desc')
             ->headerActions([
+               ExportAction::make('export')
+                ->label('Excel')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->exporter(\App\Filament\Exports\ReportProposalExporter::class)
+                ->after(function () {
+                    Notification::make()
+                        ->title('Export completed')
+                        ->body('File Excel sudah siap di-download.')
+                        ->success()
+                        ->sendToDatabase(auth()->user());
+                }),
+
                 Action::make('print')
                     ->label('Print')
                     ->icon('heroicon-o-printer')
