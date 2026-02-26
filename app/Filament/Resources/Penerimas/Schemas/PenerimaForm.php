@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Penerimas\Schemas;
 
+use App\Models\Penerima;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -41,9 +42,25 @@ class PenerimaForm
                     ->preload()
                     ->required(),
                 TextInput::make('pengirim')
-                    ->required(),
+                    ->label('Pengirim')
+                    ->required()
+                    ->datalist(
+                        Penerima::query()
+                            ->select('pengirim')
+                            ->distinct()
+                            ->pluck('pengirim')
+                            ->toArray()
+                    ),
                 TextInput::make('perihal')
-                    ->required(),
+                    ->label('Perihal')
+                    ->required()
+                    ->datalist(
+                        Penerima::query()
+                            ->select('perihal')
+                            ->distinct()
+                            ->pluck('perihal')
+                            ->toArray()
+                    ),
                 TextInput::make('kontak_person')
                     ->required(),
                 Select::make('sifat_surat_id')
@@ -59,13 +76,13 @@ class PenerimaForm
                     ->required()
                     ->columnSpanFull(),
                 FileUpload::make('file_upload')
-                    ->required(),
+                    ->nullable(),
                 TextInput::make('no_box')
                     ->required(),
                 TextInput::make('no_rak')
                     ->required(),
-                Toggle::make('kirim_ke_pengarah_surat')
-                    ->required(),
+                /*Toggle::make('kirim_ke_pengarah_surat')
+                    ->required(),*/
             ]);
     }
 }

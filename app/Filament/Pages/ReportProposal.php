@@ -110,16 +110,16 @@ class ReportProposal extends Page implements
             ->defaultSort('tanggal', 'desc')
             ->headerActions([
                ExportAction::make('export')
-                ->label('Excel')
-                ->icon('heroicon-o-arrow-down-tray')
-                ->exporter(\App\Filament\Exports\ReportProposalExporter::class)
-                ->after(function () {
-                    Notification::make()
-                        ->title('Export completed')
-                        ->body('File Excel sudah siap di-download.')
-                        ->success()
-                        ->sendToDatabase(auth()->user());
-                }),
+                    ->label('Excel')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(\App\Filament\Exports\ReportProposalExporter::class)
+                    ->after(function () {
+                        Notification::make()
+                            ->title('Export completed')
+                            ->body('File Excel sudah siap di-download.')
+                            ->success()
+                            ->sendToDatabase(auth()->user());
+                    }),
 
                 Action::make('print')
                     ->label('Print')

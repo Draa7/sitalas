@@ -52,9 +52,9 @@ class PenerimasTable
                 TextColumn::make('no_box')
                     ->searchable(),
                 TextColumn::make('no_rak')
-                    ->searchable(),*/
+                    ->searchable(),
                 IconColumn::make('kirim_ke_pengarah_surat')
-                    ->boolean(),
+                    ->boolean(),*/
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
