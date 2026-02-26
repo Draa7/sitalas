@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\UnitPengolah;
 use App\Models\KodeSurat;
 use App\Models\SifatSurat;
+use App\Models\Pengarah;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -44,5 +45,9 @@ class Penerima extends Model
      {
         return $this->belongsTo(SifatSurat::class, 'sifat_surat_id');
      }
+     public function pengarah()
+      {
+         return $this->hasOne(Pengarah::class, 'penerima_id');
+      }
 
 }
