@@ -2,31 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Penerima; // ganti sesuai model
+use App\Models\Penerima;
+use App\Models\Pengarah;
+use App\Models\Pengendali;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    public function show(Penerima $record)
+    public function penerima(Penerima $penerima)
     {
-        // optional: authorization / policy check
-        // $this->authorize('view', $record);
-        
+        return $this->serveLocalFile($penerima->file_upload);
+    }
 
-        $disk = 'local'; // ganti sesuai disk kamu
-        $path = $record->file_upload;
+    public function pengarah(Pengarah $pengarah)
+    {
+        return $this->serveLocalFile($pengarah->file_upload);
+    }
+    public function pengendali(Pengendali $pengendali)
+    {
+        return $this->serveLocalFile($pengendali->file_upload);
+    }
+
+    private function serveLocalFile(string $path)
+    {
+        $disk = 'local';
 
         abort_unless(Storage::disk($disk)->exists($path), 404);
 
         $absolutePath = Storage::disk($disk)->path($path);
-
-        // nama file yang tampil saat download (opsional)
         $downloadName = basename($path);
 
-        // Pakai response()->file untuk "inline" bila memungkinkan (pdf/image, dll)
-        // Kalau tidak bisa inline, browser biasanya tetap download.
         return response()->file($absolutePath, [
-            // kalau mau paksa download, jangan pakai file() -> pakai download()
             'Content-Disposition' => 'inline; filename="'.$downloadName.'"',
         ]);
     }

@@ -37,7 +37,7 @@ class PenerimasTable
                 TextColumn::make('file_upload')
                     ->label('File upload')
                     ->formatStateUsing(fn ($state) => basename($state))
-                    ->url(fn ($record) => route('penerimas.file.show', $record))
+                    ->url(fn ($record) => route('penerimas.file.show', ['penerima' => $record->getKey()]))
                     ->openUrlInNewTab(),
                 TextColumn::make('pengirim')
                     ->searchable(),

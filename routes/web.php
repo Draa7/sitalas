@@ -4,8 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProposalPrintController;
 use App\Http\Controllers\FileController;
 
- Route::get('/penerimas/{record}/file', [FileController::class, 'show'])
+Route::get('/penerimas/{penerima}/file', [FileController::class, 'penerima'])
     ->name('penerimas.file.show');
+
+Route::get('/pengarahs/{pengarah}/file', [FileController::class, 'pengarah'])
+    ->name('pengarahs.file.show');
+
+Route::get('/pengendalis/{pengendali}/file', [FileController::class, 'pengendali'])
+    ->name('pengendalis.file.show');
 
 Route::get('/', function () {
     return view('welcome');

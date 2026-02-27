@@ -39,7 +39,10 @@ class PengendalisTable
                     ->label('Sifat Surat')
                     ->sortable(),
                 TextColumn::make('file_upload')
-                    ->searchable(),
+                    ->label('File upload')
+                    ->formatStateUsing(fn ($state) => basename($state))
+                    ->url(fn ($record) => route('pengendalis.file.show', ['pengendali' => $record->getKey()]))
+                    ->openUrlInNewTab(),
                 TextColumn::make('unitPengolah.direktorat')
                     ->label('Unit Pengolah')
                     ->sortable(),
