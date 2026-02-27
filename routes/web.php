@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProposalPrintController;
+use App\Http\Controllers\FileController;
+
+ Route::get('/penerimas/{record}/file', [FileController::class, 'show'])
+    ->name('penerimas.file.show');
 
 Route::get('/', function () {
     return view('welcome');

@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Storage;
 use Filament\Tables\Table;
 use App\Models\Pengarah;
 use Filament\Actions\Action;
@@ -34,7 +35,10 @@ class PenerimasTable
                     ->numeric()
                     ->sortable(),*/
                 TextColumn::make('file_upload')
-                    ->searchable(),
+                    ->label('File upload')
+                    ->formatStateUsing(fn ($state) => basename($state))
+                    ->url(fn ($record) => route('penerimas.file.show', $record))
+                    ->openUrlInNewTab(),
                 TextColumn::make('pengirim')
                     ->searchable(),
                 TextColumn::make('perihal')
