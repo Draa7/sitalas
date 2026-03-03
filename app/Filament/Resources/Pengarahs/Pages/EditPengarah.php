@@ -11,6 +11,11 @@ class EditPengarah extends EditRecord
 {
     protected static string $resource = PengarahResource::class;
 
+    public function getRedirectUrl(): ?string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function getHeaderActions(): array
     {
         return [
