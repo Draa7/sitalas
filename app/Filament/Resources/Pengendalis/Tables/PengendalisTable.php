@@ -49,6 +49,9 @@ class PengendalisTable
                 TextColumn::make('kodeSurat.kode')
                     ->label('Kode Surat')
                     ->sortable(),
+                TextColumn::make('kodeSurat.index')
+                    ->label('Indeks')
+                    ->sortable(),
                 /*TextColumn::make('pengirim')
                     ->searchable(),
                 
