@@ -10,10 +10,5 @@ class ListSopdApproves extends ListRecords
 {
     protected static string $resource = SopdApproveResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            CreateAction::make(),
-        ];
-    }
+    
 }

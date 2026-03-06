@@ -58,7 +58,7 @@ class SopdApproveResource extends Resource
     {
         return [
             'index' => ListSopdApproves::route('/'),
-            'create' => CreateSopdApprove::route('/create'),
+            #'create' => CreateSopdApprove::route('/create'),
             'view' => ViewSopdApprove::route('/{record}'),
             'edit' => EditSopdApprove::route('/{record}/edit'),
         ];
