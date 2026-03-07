@@ -54,10 +54,6 @@ class SopdApprovesTable
                     ->label('Status')
                     ->badge(),
 
-                TextColumn::make('tambahSuratKeluar.alasan_penolakan')
-                    ->label('Alasan Penolakan')
-                    ->limit(40),
-
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

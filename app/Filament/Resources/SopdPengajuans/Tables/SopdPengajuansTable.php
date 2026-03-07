@@ -48,9 +48,19 @@ class SopdPengajuansTable
 
                 TextColumn::make('status')
                     ->badge()
-                    ->default('belum request')
-                    ->sortable(),
-                    
+                    ->formatStateUsing(fn ($state) => $state ?: 'belum request')
+                    ->colors([
+                        'warning' => 'pending',
+                        'success' => 'diterima',
+                        'danger' => 'ditolak',
+                        'secondary' => 'belum request',
+                    ]),
+
+                TextColumn::make('alasan_penolakan')
+                    ->label('Alasan Penolakan')
+                    ->wrap()
+                    ->color('danger')
+                    ->formatStateUsing(fn ($state, $record) => $record->status === 'ditolak' ? $state : '-'),
 
                 TextColumn::make('created_at')
                     ->dateTime()
