@@ -12,6 +12,8 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use App\Models\TambahSuratKeluar;
+use App\Models\ListBiro;
+use Illuminate\Support\Facades\DB;
 
 class SopdApprovesTable
 {
@@ -83,61 +85,86 @@ class SopdApprovesTable
                     ->requiresConfirmation()
                     ->visible(fn ($record) => $record->tambahSuratKeluar?->status === 'pending')
                     ->action(function ($record) {
-                        $surat = TambahSuratKeluar::find($record->tambah_surat_keluar_id);
+                        DB::transaction(function () use ($record) {
+                            $surat = TambahSuratKeluar::find($record->tambah_surat_keluar_id);
 
-                        if (! $surat) {
-                            Notification::make()
-                                ->title('Data surat keluar tidak ditemukan')
-                                ->danger()
-                                ->send();
+                            if (! $surat) {
+                                Notification::make()
+                                    ->title('Data surat keluar tidak ditemukan')
+                                    ->danger()
+                                    ->send();
 
-                            return;
-                        }
+                                return;
+                            }
 
-                        $surat->update([
-                            'status' => 'diterima',
-                            'alasan_penolakan' => null,
-                        ]);
+                            ListBiro::create([
+                                'tambah_surat_keluar_id' => $record->tambah_surat_keluar_id,
+                                'tanggal_surat' => $record->tanggal_surat,
+                                'klasifikasi_id' => $record->klasifikasi_id,
+                                'no_urut' => $record->no_urut,
+                                'kode_id' => $record->kode_id,
+                                'no_surat' => $record->no_surat,
+                                'sifat_surat_id' => $record->sifat_surat_id,
+                                'perihal' => $record->perihal,
+                                'direktorat_id' => $record->direktorat_id,
+                                'kontak_person' => $record->kontak_person,
+                                'kepada' => $record->kepada,
+                                'keterangan' => $record->keterangan,
+                                'upload_file' => $record->upload_file,
+                                'lampiran' => $record->lampiran,
+                            ]);
+
+                            $surat->update([
+                                'status' => 'diterima',
+                                'alasan_penolakan' => null,
+                            ]);
+
+                            $record->delete();
+                        });
 
                         Notification::make()
-                            ->title('Pengajuan berhasil diterima')
+                            ->title('Pengajuan berhasil diterima dan dipindahkan ke List Biro')
                             ->success()
                             ->send();
                     }),
 
-                Action::make('tolak')
-                    ->label('Tolak')
-                    ->icon('heroicon-o-x-circle')
-                    ->color('danger')
-                    ->visible(fn ($record) => $record->tambahSuratKeluar?->status === 'pending')
-                    ->form([
-                        Textarea::make('alasan_penolakan')
-                            ->label('Alasan Penolakan')
-                            ->default('surat ini harus di perbaiki')
-                            ->required(),
-                    ])
-                    ->action(function ($record, array $data) {
-                        $surat = TambahSuratKeluar::find($record->tambah_surat_keluar_id);
+                        Action::make('tolak')
+                            ->label('Tolak')
+                            ->icon('heroicon-o-x-circle')
+                            ->color('danger')
+                            ->visible(fn ($record) => $record->tambahSuratKeluar?->status === 'pending')
+                            ->form([
+                                Textarea::make('alasan_penolakan')
+                                    ->label('Alasan Penolakan')
+                                    ->default('surat ini harus di perbaiki')
+                                    ->required(),
+                            ])
+                            ->action(function ($record, array $data) {
+                                DB::transaction(function () use ($record, $data) {
+                                    $surat = TambahSuratKeluar::find($record->tambah_surat_keluar_id);
 
-                        if (! $surat) {
-                            Notification::make()
-                                ->title('Data surat keluar tidak ditemukan')
-                                ->danger()
-                                ->send();
+                                    if (! $surat) {
+                                        Notification::make()
+                                            ->title('Data surat keluar tidak ditemukan')
+                                            ->danger()
+                                            ->send();
 
-                            return;
-                        }
+                                        return;
+                                    }
 
-                        $surat->update([
-                            'status' => 'ditolak',
-                            'alasan_penolakan' => $data['alasan_penolakan'],
-                        ]);
+                                    $surat->update([
+                                        'status' => 'ditolak',
+                                        'alasan_penolakan' => $data['alasan_penolakan'],
+                                    ]);
 
-                        Notification::make()
-                            ->title('Pengajuan berhasil ditolak')
-                            ->success()
-                            ->send();
-                    }),
+                                    $record->delete();
+                                });
+
+                                Notification::make()
+                                    ->title('Pengajuan berhasil ditolak')
+                                    ->success()
+                                    ->send();
+                            }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
