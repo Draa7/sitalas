@@ -18,33 +18,44 @@ class UsersTable
                 TextColumn::make('name')
                     ->label('Nama')
                     ->searchable(),
+
                 TextColumn::make('email')
                     ->label('Alamat Email')
                     ->searchable(),
-                TextColumn::make('email_verified_at')
-                    ->label('Email Verifikasi')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('direktorat_id')
+
+                TextColumn::make('unitPengolah.direktorat')
                     ->label('Direktorat')
-                    ->numeric()
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('file_ttd')
-                    ->label('File Tanda Tangan')
-                    ->searchable(),
+
                 TextColumn::make('no_hp')
+                    ->label('No HP')
                     ->searchable(),
+
+                IconColumn::make('sopd')
+                    ->label('SOPD')
+                    ->boolean(),
+
                 IconColumn::make('active')
                     ->label('Aktif')
                     ->boolean(),
+
+                TextColumn::make('last_login')
+                    ->label('Last Login')
+                    ->dateTime('d M y H:i')
+                    ->placeholder('-'),
+
+                TextColumn::make('created_at')
+                    ->label('Dibuat')
+                    ->dateTime('d M y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('updated_at')
+                    ->label('Diubah')
+                    ->dateTime('d M y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

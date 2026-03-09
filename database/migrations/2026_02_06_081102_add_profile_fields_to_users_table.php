@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('file_ttd')->nullable();
             $table->string('no_hp', 20)->nullable();
             $table->string('tkls')->nullable();
-            $table->string('sopd')->nullable();
+            $table->boolean('sopd')->default(false);
             $table->timestamp('last_login')->nullable();
             $table->boolean('active')->default(true);
         });
