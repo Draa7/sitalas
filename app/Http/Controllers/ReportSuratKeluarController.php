@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Filament\Exports\ReportSuratKeluarExport;
 use App\Models\TambahSuratKeluar;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -11,51 +12,60 @@ class ReportSuratKeluarController extends Controller
 {
     public function print(Request $request)
     {
-        $query = TambahSuratKeluar::query()
-            ->with(['UnitPengolah', 'Klasifikasi', 'Kode']);
+        $filters = $this->getFilters($request);
 
-        if ($request->filled('dari_tgl')) {
-            $query->whereDate('tanggal_surat', '>=', $request->dari_tgl);
-        }
-
-        if ($request->filled('sampai_tgl')) {
-            $query->whereDate('tanggal_surat', '<=', $request->sampai_tgl);
-        }
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-
-            $query->where(function ($q) use ($search) {
-                $q->where('no_surat', 'like', "%{$search}%")
-                    ->orWhere('perihal', 'like', "%{$search}%")
-                    ->orWhere('kepada', 'like', "%{$search}%")
-                    ->orWhere('keterangan', 'like', "%{$search}%")
-                    ->orWhereHas('UnitPengolah', fn ($sub) => $sub->where('direktorat', 'like', "%{$search}%"))
-                    ->orWhereHas('Klasifikasi', fn ($sub) => $sub->where('klasifikasi', 'like', "%{$search}%"))
-                    ->orWhereHas('Kode', fn ($sub) => $sub->where('kode', 'like', "%{$search}%"));
-            });
-        }
-
-        $records = $query
+        $records = $this->getFilteredQuery($filters)
             ->orderBy('tanggal_surat', 'desc')
             ->get();
 
         return view('reports.surat-keluar-print', [
             'records' => $records,
-            'dari_tgl' => $request->dari_tgl,
-            'sampai_tgl' => $request->sampai_tgl,
-            'search' => $request->search,
+            'dari_tgl' => $filters['dari_tgl'],
+            'sampai_tgl' => $filters['sampai_tgl'],
         ]);
     }
-     public function export(Request $request)
+
+    public function export(Request $request)
     {
+        $filters = $this->getFilters($request);
+
+        $filename = 'report-surat-keluar';
+
+        if ($filters['dari_tgl'] || $filters['sampai_tgl']) {
+            $filename .= '-' . ($filters['dari_tgl'] ?: 'awal');
+            $filename .= '-sd-' . ($filters['sampai_tgl'] ?: 'akhir');
+        }
+
+        $filename .= '.xlsx';
+
         return Excel::download(
             new ReportSuratKeluarExport(
-                $request->dari_tgl,
-                $request->sampai_tgl,
-                $request->search
+                $filters['dari_tgl'],
+                $filters['sampai_tgl'],
             ),
-            'report-surat-keluar.xlsx'
+            $filename
         );
+    }
+
+    protected function getFilters(Request $request): array
+    {
+        return [
+            'dari_tgl' => $request->filled('dari_tgl') ? $request->string('dari_tgl')->value() : null,
+            'sampai_tgl' => $request->filled('sampai_tgl') ? $request->string('sampai_tgl')->value() : null,
+        ];
+    }
+
+    protected function getFilteredQuery(array $filters): Builder
+    {
+        return TambahSuratKeluar::query()
+            ->with(['UnitPengolah', 'Klasifikasi', 'Kode'])
+            ->when(
+                filled($filters['dari_tgl']),
+                fn (Builder $query) => $query->whereDate('tanggal_surat', '>=', $filters['dari_tgl'])
+            )
+            ->when(
+                filled($filters['sampai_tgl']),
+                fn (Builder $query) => $query->whereDate('tanggal_surat', '<=', $filters['sampai_tgl'])
+            );
     }
 }

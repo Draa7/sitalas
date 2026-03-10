@@ -4,20 +4,19 @@ namespace App\Filament\Pages;
 
 use App\Models\TambahSuratKeluar;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
-use Filament\Actions\Action;
 
 class ReportSuratKeluar extends Page implements HasTable, HasForms
 {
@@ -37,7 +36,6 @@ class ReportSuratKeluar extends Page implements HasTable, HasForms
         $this->form->fill([
             'dari_tgl' => null,
             'sampai_tgl' => null,
-            'search' => null,
         ]);
     }
 
@@ -45,20 +43,22 @@ class ReportSuratKeluar extends Page implements HasTable, HasForms
     {
         return $schema
             ->components([
-                DatePicker::make('dari_tgl')
-                    ->label('Dari Tanggal')
-                    ->native(false)
-                    ->live(),
+                Grid::make(2)
+                    ->schema([
+                        DatePicker::make('dari_tgl')
+                            ->label('Dari Tanggal')
+                            ->native(false)
+                            ->live()
+                            ->displayFormat('d M Y')
+                            ->closeOnDateSelection(),
 
-                DatePicker::make('sampai_tgl')
-                    ->label('Sampai Tanggal')
-                    ->native(false)
-                    ->live(),
-
-                TextInput::make('search')
-                    ->label('Search')
-                    ->placeholder('Cari no surat, perihal, kepada, unit pengolah')
-                    ->live(debounce: 500),
+                        DatePicker::make('sampai_tgl')
+                            ->label('Sampai Tanggal')
+                            ->native(false)
+                            ->live()
+                            ->displayFormat('d M Y')
+                            ->closeOnDateSelection(),
+                    ]),
             ])
             ->statePath('data');
     }
@@ -75,27 +75,22 @@ class ReportSuratKeluar extends Page implements HasTable, HasForms
 
                 TextColumn::make('UnitPengolah.direktorat')
                     ->label('Unit Pengolah')
-                    ->searchable()
                     ->wrap(),
 
                 TextColumn::make('no_surat')
                     ->label('No Surat')
-                    ->searchable()
                     ->wrap(),
 
                 TextColumn::make('Kode.kode')
-                    ->label('Kode')
-                    ->searchable(),
+                    ->label('Kode'),
 
                 TextColumn::make('perihal')
                     ->label('Perihal')
-                    ->searchable()
                     ->wrap()
                     ->limit(50),
 
                 TextColumn::make('kepada')
                     ->label('Kepada')
-                    ->searchable()
                     ->wrap(),
 
                 TextColumn::make('Klasifikasi.klasifikasi')
@@ -114,6 +109,7 @@ class ReportSuratKeluar extends Page implements HasTable, HasForms
             ])
             ->defaultSort('tanggal_surat', 'desc')
             ->paginated([10, 25, 50, 100])
+            ->searchable(false)
             ->headerActions([
                 Action::make('reset_filter')
                     ->label('Reset Filter')
@@ -123,7 +119,6 @@ class ReportSuratKeluar extends Page implements HasTable, HasForms
                         $this->form->fill([
                             'dari_tgl' => null,
                             'sampai_tgl' => null,
-                            'search' => null,
                         ]);
                     }),
 
@@ -134,7 +129,6 @@ class ReportSuratKeluar extends Page implements HasTable, HasForms
                     ->url(fn () => route('report.surat-keluar.print', [
                         'dari_tgl' => $this->data['dari_tgl'] ?? null,
                         'sampai_tgl' => $this->data['sampai_tgl'] ?? null,
-                        'search' => $this->data['search'] ?? null,
                     ]))
                     ->openUrlInNewTab(),
 
@@ -145,7 +139,6 @@ class ReportSuratKeluar extends Page implements HasTable, HasForms
                     ->url(fn () => route('report.surat-keluar.export', [
                         'dari_tgl' => $this->data['dari_tgl'] ?? null,
                         'sampai_tgl' => $this->data['sampai_tgl'] ?? null,
-                        'search' => $this->data['search'] ?? null,
                     ]))
                     ->openUrlInNewTab(),
             ]);
@@ -162,22 +155,6 @@ class ReportSuratKeluar extends Page implements HasTable, HasForms
             ->when(
                 filled($this->data['sampai_tgl'] ?? null),
                 fn (Builder $query) => $query->whereDate('tanggal_surat', '<=', $this->data['sampai_tgl'])
-            )
-            ->when(
-                filled($this->data['search'] ?? null),
-                function (Builder $query) {
-                    $search = $this->data['search'];
-
-                    $query->where(function (Builder $q) use ($search) {
-                        $q->where('no_surat', 'like', "%{$search}%")
-                            ->orWhere('perihal', 'like', "%{$search}%")
-                            ->orWhere('kepada', 'like', "%{$search}%")
-                            ->orWhere('keterangan', 'like', "%{$search}%")
-                            ->orWhereHas('UnitPengolah', fn (Builder $sub) => $sub->where('direktorat', 'like', "%{$search}%"))
-                            ->orWhereHas('Klasifikasi', fn (Builder $sub) => $sub->where('klasifikasi', 'like', "%{$search}%"))
-                            ->orWhereHas('Kode', fn (Builder $sub) => $sub->where('kode', 'like', "%{$search}%"));
-                    });
-                }
             );
     }
 }

@@ -83,7 +83,6 @@
     <div class="filter-info">
         <div><strong>Dari Tanggal:</strong> {{ $dari_tgl ?: '-' }}</div>
         <div><strong>Sampai Tanggal:</strong> {{ $sampai_tgl ?: '-' }}</div>
-        <div><strong>Pencarian:</strong> {{ $search ?: '-' }}</div>
         <div><strong>Jumlah Data:</strong> {{ $records->count() }}</div>
     </div>
 
