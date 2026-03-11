@@ -1,0 +1,168 @@
+<?php
+
+namespace App\Filament\Pages;
+
+use App\Models\Penerima;
+use BackedEnum;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Pages\Page;
+use Filament\Schemas\Components\Section;
+use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+
+class ReportSuratMasuk extends Page implements Tables\Contracts\HasTable
+{
+    use Tables\Concerns\InteractsWithTable;
+
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-document-chart-bar';
+    protected static ?string $navigationLabel = 'Report Surat Masuk';
+    protected static ?string $title = 'Report Surat Masuk';
+    protected string $view = 'filament.pages.report-surat-masuk';
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->query(
+                Penerima::query()->with([
+                    'unitPengolah',
+                    'kodeSurat',
+                    'sifatSurat',
+                    'pengarah',
+                ])
+            )
+            ->columns([
+                TextColumn::make('tanggal_terima')
+                    ->label('Tgl Masuk')
+                    ->date('d M Y')
+                    ->sortable(),
+
+                TextColumn::make('tanggal_surat')
+                    ->label('Tgl Surat')
+                    ->date('d M Y')
+                    ->sortable(),
+
+                TextColumn::make('pengirim')
+                    ->searchable()
+                    ->wrap(),
+
+                TextColumn::make('unitPengolah.direktorat')
+                    ->label('Unit Pengolah')
+                    ->searchable()
+                    ->sortable()
+                    ->wrap(),
+
+                TextColumn::make('sifatSurat.sifat_surat')
+                    ->label('Sifat Surat')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('kodeSurat.kode')
+                    ->label('Kode')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('perihal')
+                    ->searchable()
+                    ->wrap(),
+
+                TextColumn::make('no_surat')
+                    ->label('No Surat')
+                    ->searchable()
+                    ->wrap(),
+
+                TextColumn::make('no_box')
+                    ->label('No Box')
+                    ->searchable(),
+
+                TextColumn::make('no_rak')
+                    ->label('No Rak')
+                    ->searchable(),
+            ])
+            ->defaultSort('tanggal_terima', 'desc')
+            ->striped()
+            ->filters([
+                Filter::make('tanggal_terima')
+                    ->label('Filter Tanggal Masuk')
+                    ->schema([
+                        DatePicker::make('tanggal_dari')
+                            ->label('Dari Tanggal'),
+
+                        DatePicker::make('tanggal_sampai')
+                            ->label('Sampai Tanggal'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['tanggal_dari'] ?? null,
+                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal_terima', '>=', $date)
+                            )
+                            ->when(
+                                $data['tanggal_sampai'] ?? null,
+                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal_terima', '<=', $date)
+                            );
+                    }),
+
+                Filter::make('unit_pengolah')
+                    ->label('Unit Pengolah')
+                    ->schema([
+                        Select::make('direktorat_id')
+                            ->label('Unit Pengolah')
+                            ->relationship('unitPengolah', 'direktorat')
+                            ->searchable()
+                            ->preload(),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['direktorat_id'] ?? null,
+                            fn (Builder $query, $state): Builder => $query->where('direktorat_id', $state)
+                        );
+                    }),
+
+                Filter::make('sifat_surat')
+                    ->label('Sifat Surat')
+                    ->schema([
+                        Select::make('sifat_surat_id')
+                            ->label('Sifat Surat')
+                            ->relationship('sifatSurat', 'sifat_surat')
+                            ->searchable()
+                            ->preload(),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['sifat_surat_id'] ?? null,
+                            fn (Builder $query, $state): Builder => $query->where('sifat_surat_id', $state)
+                        );
+                    }),
+
+                Filter::make('kode_surat')
+                    ->label('Kode Surat')
+                    ->schema([
+                        Select::make('kode_id')
+                            ->label('Kode Surat')
+                            ->relationship('kodeSurat', 'kode')
+                            ->searchable()
+                            ->preload(),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['kode_id'] ?? null,
+                            fn (Builder $query, $state): Builder => $query->where('kode_id', $state)
+                        );
+                    }),
+            ])
+            ->filtersFormSchema(fn (array $filters): array => [
+                Section::make('Filter Report Surat Masuk')
+                    ->schema([
+                        $filters['tanggal_terima'],
+                        $filters['unit_pengolah'],
+                        $filters['sifat_surat'],
+                        $filters['kode_surat'],
+                    ])
+                    ->columns(2),
+            ]);
+    }
+}
