@@ -76,7 +76,6 @@ class SopdApprovesTable
             ])
             ->actions([
                 ViewAction::make(),
-                EditAction::make(),
 
                 Action::make('terima')
                     ->label('Terima')

@@ -16,6 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class SopdApproveResource extends Resource
 {
@@ -62,5 +63,10 @@ class SopdApproveResource extends Resource
             'view' => ViewSopdApprove::route('/{record}'),
             'edit' => EditSopdApprove::route('/{record}/edit'),
         ];
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
     }
 }
