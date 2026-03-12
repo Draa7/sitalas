@@ -6,64 +6,32 @@ use App\Models\TambahSuratKeluar;
 use BackedEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Enums\Width;
 use Filament\Tables;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use SebastianBergmann\CodeCoverage\Report\Xml\Unit;
 use UnitEnum;
 use Filament\Actions\EditAction;
-use Filament\Schemas\Components\Grid;
 
-class SopdReport extends Page implements HasTable, HasForms
+class SopdReport extends Page implements HasTable
 {
     use InteractsWithTable;
-    use InteractsWithForms;
 
-    #protected static string |BackedEnum| null $navigationIcon = 'heroicon-o-document-chart-bar';
+    #protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-document-chart-bar';
     protected static ?string $navigationLabel = 'SOPD Report';
     protected static ?string $title = 'SOPD Report Surat Keluar';
-    protected static string |UnitEnum| null $navigationGroup = 'Surat Keluar';
+    protected static string | UnitEnum | null $navigationGroup = 'Surat Keluar';
     protected string $view = 'filament.pages.sopd-report';
-
-    public ?array $filters = [];
-
-    public function mount(): void
-    {
-        $this->form->fill([
-            'tanggal_mulai' => now()->startOfMonth()->toDateString(),
-            'tanggal_selesai' => now()->toDateString(),
-        ]);
-    }
-
-    public function form(Schema $schema): Schema
-    {
-        return $schema
-            ->components([
-                Grid::make(2)->schema([
-                    DatePicker::make('tanggal_mulai')
-                        ->label('Dari Tanggal')
-                        ->native(false),
-
-                    DatePicker::make('tanggal_selesai')
-                        ->label('Sampai Tanggal')
-                        ->native(false),
-                ]),
-            ])
-            ->statePath('filters');
-    }
 
     public function table(Table $table): Table
     {
         return $table
-            ->query($this->getTableQuery())
+            ->query(fn (): Builder => $this->getTableQuery())
             ->columns([
                 Tables\Columns\TextColumn::make('no_urut')
                     ->label('No Urt')
@@ -112,6 +80,25 @@ class SopdReport extends Page implements HasTable, HasForms
             ->defaultSort('tanggal_surat', 'desc')
             ->striped()
             ->paginated([10, 25, 50])
+            ->filters([
+                Filter::make('tanggal')
+                    ->label('Filter Tanggal')
+                    ->schema([
+                        DatePicker::make('tanggal_dari')
+                            ->label('Dari Tanggal')
+                            ->native(false)
+                            ->displayFormat('d/m/Y')
+                            ->placeholder('Pilih tanggal'),
+
+                        DatePicker::make('tanggal_sampai')
+                            ->label('Sampai Tanggal')
+                            ->native(false)
+                            ->displayFormat('d/m/Y')
+                            ->placeholder('Pilih tanggal'),
+                    ])
+                    ->columns(2),
+            ])
+            ->filtersFormColumns(1)
             ->actions([
                 EditAction::make()
                     ->label('Edit')
@@ -138,28 +125,31 @@ class SopdReport extends Page implements HasTable, HasForms
                     ),
             ])
             ->emptyStateHeading('Belum ada data surat keluar')
-            ->emptyStateDescription('Data akan tampil berdasarkan filter tanggal yang dipilih.');
+            ->emptyStateDescription('Pilih rentang tanggal dari tombol filter lalu klik Apply filters.');
     }
 
     protected function getTableQuery(): Builder
     {
-        return TambahSuratKeluar::query()
+        $tanggalDari = data_get($this->tableFilters, 'tanggal.tanggal_dari');
+        $tanggalSampai = data_get($this->tableFilters, 'tanggal.tanggal_sampai');
+
+        $query = TambahSuratKeluar::query()
             ->with([
                 'unitPengolah',
                 'klasifikasi',
-            ])
-            ->when(
-                $this->filters['tanggal_mulai'] ?? null,
-                fn (Builder $query, $date) => $query->whereDate('tanggal_surat', '>=', $date)
-            )
-            ->when(
-                $this->filters['tanggal_selesai'] ?? null,
-                fn (Builder $query, $date) => $query->whereDate('tanggal_surat', '<=', $date)
-            );
+            ]);
+
+        if (blank($tanggalDari) || blank($tanggalSampai)) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        return $query
+            ->whereDate('tanggal_surat', '>=', $tanggalDari)
+            ->whereDate('tanggal_surat', '<=', $tanggalSampai);
     }
 
     public function getMaxContentWidth(): Width|string|null
-        {
-            return Width::Full;
-        }
+    {
+        return Width::Full;
+    }
 }
