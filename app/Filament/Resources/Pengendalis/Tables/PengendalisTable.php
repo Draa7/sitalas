@@ -83,11 +83,9 @@ class PengendalisTable
             ->filters([
                 //
             ])
-            ->recordActions([
+            ->actions([
                 ViewAction::make(),
                 EditAction::make(),
-            ])
-            ->actions([
                 Action::make('print')
                     ->label('Print')
                     ->icon('heroicon-o-printer')
