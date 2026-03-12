@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Penerima;
 use App\Models\Pengarah;
 use App\Models\Pengendali;
+use App\Models\TambahSuratKeluar;
+use App\Models\SopdApprove;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
@@ -21,6 +23,15 @@ class FileController extends Controller
     public function pengendali(Pengendali $pengendali)
     {
         return $this->serveLocalFile($pengendali->file_upload);
+    }
+
+    public function tambahSuratKeluar(TambahSuratKeluar $tambahSuratKeluar)
+    {
+        return $this->serveLocalFile($tambahSuratKeluar->file_upload);
+    }
+    public function sopdApprove(SopdApprove $sopdApprove)
+    {
+        return $this->serveLocalFile($sopdApprove->file_upload);
     }
 
     private function serveLocalFile(string $path)

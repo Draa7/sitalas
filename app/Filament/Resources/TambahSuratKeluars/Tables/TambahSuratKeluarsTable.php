@@ -43,8 +43,11 @@ class TambahSuratKeluarsTable
                     ->searchable(),*/
                 TextColumn::make('kepada')
                     ->searchable(),
-                TextColumn::make('upload_file')
-                    ->searchable(),
+                TextColumn::make('file_upload')
+                    ->label('File upload')
+                    ->formatStateUsing(fn ($state) => basename($state))
+                    ->url(fn ($record) => route('tambahSuratKeluars.file.show', ['tambahSuratkeluar' => $record->getKey()]))
+                    ->openUrlInNewTab(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
