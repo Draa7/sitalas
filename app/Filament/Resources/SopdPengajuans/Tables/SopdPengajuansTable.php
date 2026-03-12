@@ -44,7 +44,15 @@ class SopdPengajuansTable
                     ->searchable(),
 
                 TextColumn::make('upload_file')
-                    ->searchable(),
+                    ->label('File upload')
+                    ->formatStateUsing(fn ($state) => filled($state) ? basename($state) : '-')
+                    ->url(fn ($record) => filled($record->upload_file)
+                        ? route('tambahsuratkeluars.file.show', [
+                            'tambahSuratKeluar' => $record->getKey(),
+                        ])
+                        : null
+                    )
+                    ->openUrlInNewTab(),
 
                 TextColumn::make('status')
                     ->badge()
