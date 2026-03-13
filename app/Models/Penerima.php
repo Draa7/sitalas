@@ -6,6 +6,7 @@ use App\Models\UnitPengolah;
 use App\Models\KodeSurat;
 use App\Models\SifatSurat;
 use App\Models\Pengarah;
+use App\Models\Pengendali;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -53,5 +54,8 @@ class Penerima extends Model
       {
          return $this->hasOne(Pengarah::class, 'penerima_id');
       }
-
+      public function pengendali()
+      {
+         return $this->hasOne(Pengendali::class, 'penerima_id');
+      }
 }
