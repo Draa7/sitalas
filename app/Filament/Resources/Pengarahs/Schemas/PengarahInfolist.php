@@ -33,8 +33,8 @@ class PengarahInfolist
                             ->copyable()
                             ->columnSpan(4),
 
-                        TextEntry::make('kepada')
-                            ->label('Kepada')
+                        TextEntry::make('pengirim')
+                            ->label('Pengirim')
                             ->placeholder('-')
                             ->columnSpan(6),
 
@@ -60,11 +60,11 @@ class PengarahInfolist
                             ->label('Direktorat')
                             ->columnSpan(4),
 
-                        TextEntry::make('Kode.kode')
+                        TextEntry::make('kodeSurat.kode')
                             ->label('Kode')
                             ->columnSpan(4),
 
-                        TextEntry::make('sifat.sifat_surat')
+                        TextEntry::make('sifatSurat.sifat_surat')
                             ->label('Sifat Surat')
                             ->columnSpan(4),
                     ]),
