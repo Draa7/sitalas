@@ -66,8 +66,16 @@
             background: rgba(255, 255, 255, 0.02);
         }
 
+        /* SCROLL HORIZONTAL */
+        .report-subtable-scroll {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .report-subtable {
             width: 100%;
+            min-width: 900px;
             border-collapse: collapse;
             table-layout: fixed;
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -110,6 +118,15 @@
             padding: 16px;
             color: rgba(255, 255, 255, 0.7);
         }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 640px) {
+            .report-subtable th,
+            .report-subtable td {
+                padding: 8px;
+                font-size: 13px;
+            }
+        }
     </style>
 
     <div class="space-y-6">
@@ -123,6 +140,7 @@
             </div>
         @else
             <div class="report-wrapper">
+
                 <div class="report-header">
                     <div class="report-cell report-cell-toggle"></div>
                     <div class="report-cell report-cell-name">Direktorat</div>
@@ -131,6 +149,7 @@
 
                 @forelse ($this->groupedSurat as $group)
                     <div class="report-group" x-data="{ open: false }">
+
                         <div class="report-row">
                             <div class="report-cell report-cell-toggle">
                                 <button type="button" class="toggle-btn" @click="open = !open">
@@ -149,55 +168,68 @@
                         </div>
 
                         <div x-show="open" x-collapse class="report-subtable-wrap">
-                            <table class="report-subtable">
-                                <thead>
-                                    <tr>
-                                        <th class="nowrap" style="width: 120px;">Tgl Surat</th>
-                                        <th style="width: 220px;">Pengirim</th>
-                                        <th style="width: 100px;">No Surat</th>
-                                        <th style="width: 200px;">Perihal</th>
-                                        <th class="nowrap" style="width: 140px;">Kode Surat</th>
-                                        <th class="nowrap" style="width: 140px;">Sifat Surat</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($group->items as $item)
+
+                            <div class="report-subtable-scroll">
+
+                                <table class="report-subtable">
+                                    <thead>
                                         <tr>
-                                            <td class="nowrap">
-                                                {{ $item->tanggal_surat?->format('d M Y') }}
-                                            </td>
-                                            <td>
-                                                {{ $item->pengirim }}
-                                            </td>
-                                            <td>
-                                                {{ $item->no_surat }}
-                                            </td>
-                                            <td>
-                                                {{ $item->perihal }}
-                                            </td>
-                                            <td class="nowrap">
-                                                {{ $item->kodeSurat?->kode }}
-                                            </td>
-                                            <td class="nowrap">
-                                                {{ $item->sifatSurat?->sifat_surat }}
-                                            </td>
+                                            <th class="nowrap" style="width:120px;">Tgl Surat</th>
+                                            <th style="width:220px;">Pengirim</th>
+                                            <th style="width:120px;">No Surat</th>
+                                            <th style="width:220px;">Perihal</th>
+                                            <th class="nowrap" style="width:140px;">Kode Surat</th>
+                                            <th class="nowrap" style="width:140px;">Sifat Surat</th>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" style="text-align: center; color: rgba(255,255,255,.65);">
-                                                No data to display
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                                    </thead>
+
+                                    <tbody>
+                                        @forelse ($group->items as $item)
+                                            <tr>
+                                                <td class="nowrap">
+                                                    {{ $item->tanggal_surat?->format('d M Y') }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $item->pengirim }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $item->no_surat }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $item->perihal }}
+                                                </td>
+
+                                                <td class="nowrap">
+                                                    {{ $item->kodeSurat?->kode }}
+                                                </td>
+
+                                                <td class="nowrap">
+                                                    {{ $item->sifatSurat?->sifat_surat }}
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" style="text-align:center; color:rgba(255,255,255,.65);">
+                                                    No data to display
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+
+                            </div>
+
                         </div>
                     </div>
                 @empty
-                    <div style="padding: 16px; color: rgba(255,255,255,.7);">
+                    <div style="padding:16px; color:rgba(255,255,255,.7);">
                         Tidak ada data.
                     </div>
                 @endforelse
+
             </div>
         @endif
     </div>
