@@ -13,6 +13,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use UnitEnum;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Filament\Exports\JumlahSuratMasukExport;
 
 class JumlahSuratMasuk extends Page implements Tables\Contracts\HasTable
 {
@@ -26,6 +28,21 @@ class JumlahSuratMasuk extends Page implements Tables\Contracts\HasTable
 
     protected string $view = 'filament.pages.jumlah-surat-masuk';
 
+    public function exportExcel()
+    {
+        if (! $this->hasFilterTanggal()) {
+            return;
+        }
+
+        return Excel::download(
+            new JumlahSuratMasukExport(
+                $this->groupedSurat,
+                $this->getTanggalDari(),
+                $this->getTanggalSampai()
+            ),
+            'report-jumlah-surat-masuk.xlsx'
+        );
+    }
     public function table(Table $table): Table
     {
         return $table
@@ -108,5 +125,6 @@ class JumlahSuratMasuk extends Page implements Tables\Contracts\HasTable
                 'items' => $items,
             ];
         });
+        
     }
 }

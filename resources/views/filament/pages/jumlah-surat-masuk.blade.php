@@ -66,7 +66,6 @@
             background: rgba(255, 255, 255, 0.02);
         }
 
-        /* SCROLL HORIZONTAL */
         .report-subtable-scroll {
             width: 100%;
             overflow-x: auto;
@@ -112,6 +111,19 @@
             line-height: 1;
         }
 
+        .export-btn {
+            background: #16a34a;
+            padding: 10px 18px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .export-btn:hover {
+            background: #15803d;
+        }
+
         .empty-box {
             border: 1px dashed rgba(255, 255, 255, 0.2);
             border-radius: 12px;
@@ -119,7 +131,6 @@
             color: rgba(255, 255, 255, 0.7);
         }
 
-        /* MOBILE OPTIMIZATION */
         @media (max-width: 640px) {
             .report-subtable th,
             .report-subtable td {
@@ -130,6 +141,7 @@
     </style>
 
     <div class="space-y-6">
+
         <div class="jumlah-surat-filter-only">
             {{ $this->table }}
         </div>
@@ -139,6 +151,17 @@
                 Pilih tanggal dari tombol filter di kanan atas, lalu klik <strong>Apply filters</strong>.
             </div>
         @else
+
+            <!-- EXPORT BUTTON -->
+            <div class="flex justify-end">
+                <button
+                    wire:click="exportExcel"
+                    class="export-btn"
+                >
+                    Export Excel
+                </button>
+            </div>
+
             <div class="report-wrapper">
 
                 <div class="report-header">
@@ -231,6 +254,8 @@
                 @endforelse
 
             </div>
+
         @endif
+
     </div>
 </x-filament-panels::page>
