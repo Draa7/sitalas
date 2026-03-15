@@ -9,6 +9,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms;
 use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
 class ReportTracking extends Page implements Tables\Contracts\HasTable
 {
@@ -18,6 +19,8 @@ class ReportTracking extends Page implements Tables\Contracts\HasTable
     protected string $view = 'filament.pages.report-tracking';
     protected static ?string $navigationLabel = 'Report Tracking';
     protected static ?string $title = 'Report Tracking Surat Masuk';
+    protected static string | UnitEnum | null $navigationGroup = 'Report';
+
 
     public function table(Table $table): Table
     {
