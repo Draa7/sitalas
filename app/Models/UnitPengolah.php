@@ -9,6 +9,7 @@ use App\Models\AsistenBiro;
 use App\Models\BiroBagian;
 use App\Models\Penerima;
 use App\Models\TambahSuratKeluar;
+use App\Models\SuratMasuk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -90,5 +91,9 @@ class UnitPengolah extends Model
     public function suratKeluar()
     {
         return $this->hasMany(TambahSuratKeluar::class, 'direktorat_id');
+    }
+    public function suratMasuk()
+    {
+        return $this->hasMany(SuratMasuk::class, 'direktorat_id');
     }
 }

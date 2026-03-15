@@ -3,6 +3,7 @@
 namespace App\Models;
 use App\Models\Penerima;
 use App\Models\TambahSuratKeluar;
+use App\Models\SuratMasuk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,5 +24,9 @@ class KodeSurat extends Model
     public function suratKeluar()
     {
         return $this->hasMany(TambahSuratKeluar::class, 'kode_id');
+    }
+    public function suratMasuk()
+    {
+        return $this->hasMany(SuratMasuk::class, 'kode_id');
     }
 }
